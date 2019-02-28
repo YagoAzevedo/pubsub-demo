@@ -1,25 +1,25 @@
+import { recuperarLocais, subscribe } from './dataService.js';
 
+function renderizarCidades(locais) {
+  // Recupera o elemento da lista de cidades
+  const listaCidades = document.getElementById('citiesList');
 
-import { getPlaces, subscribe } from './dataService.js';
+  // limpa o elemento
+  listaCidades.innerHTML = '';
 
-function renderCities(placesArray) {
-  // Get the element for rendering the city list...
-  const cityListElement = document.getElementById('citiesList');
-
-  // ...clear it...
-  cityListElement.innerHTML = '';
-
-  // ...and populate it, one place at a time using forEach function
-  placesArray.forEach((place) => {
-    const cityElement = document.createElement('div');
-    cityElement.innerText = place.name;
-    cityListElement.appendChild(cityElement);
+  // preenche os locais através do parâmetro
+  locais.forEach((lugar) => {
+    const cidade = document.createElement('div');
+    cidade.innerText = lugar.name;
+    listaCidades.appendChild(cidade);
   });
 }
 
-renderCities(getPlaces());
+// Renderiza as cidades inicialmente
+renderizarCidades(recuperarLocais());
 
-subscribe(renderCities);
+// concluir aqui
+subscribe(renderizarCidades);
 
 
 

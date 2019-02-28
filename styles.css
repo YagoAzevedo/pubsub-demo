@@ -1,7 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
 html, body {
   height: 95vh;
 }
@@ -9,19 +5,20 @@ html, body {
 body {
   display: flex;
   height: 95vh;
-  padding: 10px 10px 10px 0;
-  margin: 10px;
-  border:1px solid black;
+  padding: 0 10px 10px 0;
+  margin-left: 10px;
+  color: #fff;
+  font-family: sans-serif;
 }
 
 h1 {
-  text-align:center;
   width: 200px;
   margin: 30px auto;
 }
 
 .sidebar {
   flex: 0 0 250px;
+  background-color: #2F4F4F;
 }
 
 .main-content-area {
@@ -34,5 +31,6 @@ h1 {
 }
 
 .cities {
-  padding: 16px;
+  padding: 25px;
+  font-size: 17px;
 }

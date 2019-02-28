@@ -1,35 +1,39 @@
-import { addPlace, getPlaces, subscribe } from './dataService.js';
+import { incluirLugar, recuperarLocais, subscribe } from './dataService.js';
 
 let googleMap;
 
-function renderMarkers(placesArray) {
-  googleMap.markerList.forEach(m => m.setMap(null)); // remove all markers
-  googleMap.markerList = [];
-
-  placesArray.forEach((place) => {
-    const marker = new google.maps.Marker({
-      position: place.position,
-      map: googleMap
-    });
-
-    googleMap.markerList.push(marker);
-  });
-}
-
+// O método init é como um construtor do nosso componente
 function init() {
+  // Instancia o mapa do google indicando a div html que deve ser manipulada
   googleMap = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 0, lng: 0 }, zoom: 3
   });
 
-  googleMap.markerList = [];
-  googleMap.addListener('click', addMarker);
+  googleMap.listaMarcacoes = [];
+  googleMap.addListener('click', addMarcacao); //callback do click inclui marcação
 }
 
-function addMarker(event) {
-  addPlace(event.latLng);
+function addMarcacao(event) {
+  incluirLugar(event.latLng); // Função adicionar lugar no dataService
+}
+
+function renderizarMarcacoes(locais) { //função de renderizar recebe os locais do dataService
+  googleMap.listaMarcacoes.forEach(m => m.setMap(null));
+  googleMap.listaMarcacoes = []; // zera as marcações
+
+  //percorre os parâmetros adicionando minha lista de marcações
+  locais.forEach((lugar) => { 
+    const marcacao = new google.maps.Marker({
+      position: lugar.position,
+      map: googleMap
+    });
+    googleMap.listaMarcacoes.push(marcacao);
+  });
 }
 
 init();
-renderMarkers(getPlaces());
-subscribe(renderMarkers);
+renderizarMarcacoes(recuperarLocais()); // realiza a renderização inicial
+
+// terminar aqui
+subscribe(renderizarMarcacoes); 
 

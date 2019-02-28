@@ -1,53 +1,54 @@
-let myPlaces = [];
+let meusLocais = [];
 const geocoder = new google.maps.Geocoder;
 
 let changeListeners = [];
 
+// Adiciona as callbacks em uma lista
 export function subscribe(callbackFunction) {
   changeListeners.push(callbackFunction);
 }
 
-/* ... */
-
+// Executa as callbacks com o parâmetro enviado
 function publish(data) {
   changeListeners.forEach((changeListener) => { changeListener(data); });
 }
 
-export function addPlace(latLng) {
+export function incluirLugar(latLng) {
+  //Busca as informações da cidade pela latitude e longitude na api do google
   geocoder.geocode({ 'location': latLng }, function (results) {
     try {
-      const cityName = results
+      //Filtra o nome da cidade no retorno da api
+      const cidadeNome = results
         .find(result => result.types.includes('locality'))
         .address_components[0]
         .long_name;
 
-      myPlaces.push({ position: latLng, name: cityName });
+      // Inclui a localização e o nome da cidade no array
+      meusLocais.push({ position: latLng, name: cidadeNome });
+      
+      /*Executa as funções de renderizar dos dois componentes
+      Com as alterações de lugar */
+      publish(meusLocais);
 
-      publish(myPlaces);
-
-      localStorage.setItem('myPlaces', JSON.stringify(myPlaces));
+      //grava o array na sessão do navegador
+      localStorage.setItem('meusLocais', JSON.stringify(meusLocais));
     } catch (e) {
-      console.log('No city found in this location! :(');
+      console.log('Nenhuma cidade encontrada nessa localização! :(');
     }
   });
 }
-
-/* ... */
-
-
-
-
-
+//Iniciar local storage
 function initLocalStorage() {
-  const placesFromLocalstorage = JSON.parse(localStorage.getItem('myPlaces'));
-  if (Array.isArray(placesFromLocalstorage)) {
-    myPlaces = placesFromLocalstorage;
-    publish();
+  const lugaresLocalStorage = JSON.parse(localStorage.getItem('meusLocais'));
+  if (Array.isArray(lugaresLocalStorage)) {
+    meusLocais = lugaresLocalStorage;
+    // publish();
   }
 }
 
-export function getPlaces() {
-  return myPlaces;
+//Recuperar os locais
+export function recuperarLocais() {
+  return meusLocais;
 }
 
 initLocalStorage();
