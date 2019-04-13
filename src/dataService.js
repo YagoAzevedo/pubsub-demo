@@ -30,7 +30,7 @@ export function incluirLugar(latLng) {
       Com as alterações de lugar */
       publish(meusLocais);
 
-      //grava o array na sessão do navegador
+      //grava o array no local storage do navegador
       localStorage.setItem('meusLocais', JSON.stringify(meusLocais));
     } catch (e) {
       console.log('Nenhuma cidade encontrada nessa localização! :(');
